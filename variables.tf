@@ -1,9 +1,11 @@
-variable "POSTGRES_USER" {
+variable "postgres_user" {
   description = "The master username for the database."
   type        = string
+  sensitive   = true
 }
 
-variable "POSTGRES_PASSWORD" {
+variable "postgres_password" {
   description = "The master password for the database."
   type        = string
+  sensitive   = true
 }

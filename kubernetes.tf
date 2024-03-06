@@ -168,8 +168,8 @@ resource "kubernetes_secret" "is-my-burguer-db" {
 
   data = {
     host = "${data.terraform_remote_state.is-my-burguer-postgres.outputs.database_endpoint}",
-    username = "${var.POSTGRES_USER}",
-    password = "${var.POSTGRES_PASSWORD}"
+    username = "${var.postgres_user}",
+    password = "${var.postgres_password}"
   }
 
   type = "kubernetes.io/basic-auth"
