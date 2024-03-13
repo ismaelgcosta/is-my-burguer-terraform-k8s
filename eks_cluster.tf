@@ -31,8 +31,8 @@ module "eks" {
   # EKS Managed Node Group(s)
   eks_managed_node_group_defaults = {
     ami_type       = "AL2_x86_64"
-    instance_types = ["t3.medium"]
-
+    instance_types = ["t3.small"]
+    disk_size             = 30
     attach_cluster_primary_security_group = true
   }
 
@@ -53,39 +53,3 @@ module "eks" {
 
   tags = local.tags
 }
-
-/* 
-resource "kubernetes_service" "example" {
-  metadata {
-    name = "example"
-  }
-  spec {
-    port {
-      port        = 8080
-      target_port = 80
-    }
-    type = "LoadBalancer"
-  }
-}
-
-# Create a local variable for the load balancer name.
-locals {
-  lb_name = split("-", split(".", kubernetes_service.example.status.0.load_balancer.0.ingress.0.hostname).0).0
-}
-
-# Read information about the load balancer using the AWS provider.
-data "aws_elb" "example" {
-  name = local.lb_name
-}
-
-output "load_balancer_name" {
-  value = local.lb_name
-}
-
-output "load_balancer_hostname" {
-  value = kubernetes_service.example.status.0.load_balancer.0.ingress.0.hostname
-}
-
-output "load_balancer_info" {
-  value = data.aws_elb.example
-} */

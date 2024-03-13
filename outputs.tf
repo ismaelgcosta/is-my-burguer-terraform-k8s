@@ -26,9 +26,15 @@ output "access_entries" {
   value       = module.eks.access_entries
 }
 
-### LENDO VARIÁVEL DE OUTRO WORKSPACE NO TERRAFORM CLOUD
+output "cluster_certificate_authority_data" {
+  description = "cluster_certificate_authority_data"
+  value       = module.eks.cluster_certificate_authority_data
+}
 
+### LENDO VARIÁVEL DE OUTRO WORKSPACE NO TERRAFORM CLOUD
+/* 
 output "current_db_instance_endpoint" {
   description = "Url database from another workspace"
   value = data.terraform_remote_state.is-my-burguer-postgres.outputs.database_endpoint
 }
+ */
