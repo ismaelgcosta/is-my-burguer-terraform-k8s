@@ -11,6 +11,7 @@ YAML
 }
 
 resource "kubectl_manifest" "metrics-server-aggregated-metrics-reader" {
+  depends_on = [ kubectl_manifest.metrics-server-svc-account ]
 yaml_body = <<YAML
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -35,6 +36,7 @@ YAML
 }
 
 resource "kubectl_manifest" "metrics-server-ctl-role" {
+  depends_on = [ kubectl_manifest.metrics-server-aggregated-metrics-reader ]
 yaml_body = <<YAML
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -62,6 +64,7 @@ YAML
 }
 
 resource "kubectl_manifest" "metrics-server-auth-reader" {
+  depends_on = [ kubectl_manifest.metrics-server-ctl-role ]
 yaml_body = <<YAML
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -82,6 +85,7 @@ YAML
 }
 
 resource "kubectl_manifest" "metrics-server-auth-delegator" {
+  depends_on = [ kubectl_manifest.metrics-server-auth-reader ]
 yaml_body = <<YAML
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -101,6 +105,7 @@ YAML
 }
 
 resource "kubectl_manifest" "metrics-server-role-metrics-server" {
+  depends_on = [ kubectl_manifest.metrics-server-auth-delegator ]
 yaml_body = <<YAML
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -120,6 +125,7 @@ YAML
 }
 
 resource "kubectl_manifest" "metrics-server-svc" {
+  depends_on = [ kubectl_manifest.metrics-server-role-metrics-server ]
 yaml_body = <<YAML
 apiVersion: v1
 kind: Service
@@ -140,6 +146,7 @@ YAML
 }
 
 resource "kubectl_manifest" "metrics-server-deployment" {
+  depends_on = [ kubectl_manifest.metrics-server-svc ]
 yaml_body = <<YAML
 apiVersion: apps/v1
 kind: Deployment
@@ -213,6 +220,7 @@ YAML
 }
 
 resource "kubectl_manifest" "metrics-server-api-svc" {
+  depends_on = [ kubectl_manifest.metrics-server-deployment ]
 yaml_body = <<YAML
 apiVersion: apiregistration.k8s.io/v1
 kind: APIService
