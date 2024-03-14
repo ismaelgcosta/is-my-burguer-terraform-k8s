@@ -31,13 +31,19 @@ module "eks" {
   # EKS Managed Node Group(s)
   eks_managed_node_group_defaults = {
     ami_type       = "AL2_x86_64"
-    instance_types = ["t3.small"]
+    instance_types = ["t3.medium"]
+    capacity_type  = "SPOT"
     disk_size             = 30
     attach_cluster_primary_security_group = true
+
+    tags = {
+      Example = local.name
+    }
+    
   }
 
   eks_managed_node_groups = {
-    ascode-cluster-wg = {
+    managed-cluster-wg = {
       min_size     = 1
       max_size     = 2
       desired_size = 1
