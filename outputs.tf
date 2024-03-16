@@ -25,16 +25,3 @@ output "access_entries" {
   description = "Map of access entries created and their attributes"
   value       = module.eks.access_entries
 }
-
-output "cluster_certificate_authority_data" {
-  description = "cluster_certificate_authority_data"
-  value       = module.eks.cluster_certificate_authority_data
-}
-
-### LENDO VARIÁVEL DE OUTRO WORKSPACE NO TERRAFORM CLOUD
-/* 
-output "current_db_instance_endpoint" {
-  description = "Url database from another workspace"
-  value = data.terraform_remote_state.is-my-burguer-postgres.outputs.database_endpoint
-}
- */
