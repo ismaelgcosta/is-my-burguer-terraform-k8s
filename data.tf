@@ -11,14 +11,3 @@ data "aws_eks_cluster_auth" "cluster" {
   depends_on = [data.aws_eks_cluster.cluster]
   name       = module.eks.cluster_name
 }
-
-data "terraform_remote_state" "is-my-burguer-postgres" {
-  backend = "remote"
-
-  config = {
-    organization = "is-my-burguer"
-    workspaces = {
-      name = "is-my-burguer-postgres"
-    }
-  }
-}

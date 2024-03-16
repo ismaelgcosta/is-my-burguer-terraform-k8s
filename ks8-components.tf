@@ -1,4 +1,10 @@
 resource "kubectl_manifest" "metrics-server-svc-account" {
+  depends_on = [
+    module.eks.module,
+    module.eks.aws_security_group_rule,
+    module.eks.aws_iam_policy,
+    module.eks.aws_iam_role_policy_attachment
+  ]
 yaml_body = <<YAML
 apiVersion: v1
 kind: ServiceAccount
