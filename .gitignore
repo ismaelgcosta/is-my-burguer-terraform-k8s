@@ -36,6 +36,8 @@ terraform.rc
 #vs code
 *.code-workspace
 
+#intellij
+*.idea
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar

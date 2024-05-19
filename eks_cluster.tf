@@ -44,9 +44,9 @@ module "eks" {
 
   eks_managed_node_groups = {
     managed-cluster-wg = {
-      min_size     = 1
-      max_size     = 2
-      desired_size = 1
+      min_size     = 2
+      max_size     = 3
+      desired_size = 2
 
       instance_types = ["t3.medium"]
       capacity_type  = "SPOT"
@@ -58,4 +58,45 @@ module "eks" {
   }
 
   tags = local.tags
+}
+
+resource "kubectl_manifest" "is-my-burguer-namespace" {
+  depends_on = [
+    data.aws_eks_cluster.cluster
+  ]
+  yaml_body = <<YAML
+apiVersion: apps/v1
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: is-my-burguer
+  namespace: is-my-burguer
+  labels:
+    name: is-my-burguer
+    app: is-my-burguer
+YAML
+}
+
+resource "kubernetes_secret" "is-my-burguer-cognito" {
+  depends_on = [
+    data.aws_eks_cluster.cluster
+  ]
+
+  metadata {
+    name      = "is-my-burguer-cognito"
+    namespace = "is-my-burguer"
+  }
+
+  immutable = false
+
+  data = {
+    user-pool-id= "${data.aws_cognito_user_pool_client.is-my-burguer-auth-client.user_pool_id}"
+    api-gateway= "${data.terraform_remote_state.is-my-burguer-cognito.outputs.api_gateway_domain}"
+    cognito_domain= "${data.terraform_remote_state.is-my-burguer-cognito.outputs.cognito_domain}"
+    username = "${data.terraform_remote_state.is-my-burguer-cognito.outputs.is-my-burguer-api-client-id}",
+    password = "${data.aws_cognito_user_pool_client.is-my-burguer-auth-client.client_secret}"
+  }
+
+  type = "kubernetes.io/basic-auth"
+
 }

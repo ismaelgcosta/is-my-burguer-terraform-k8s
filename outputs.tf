@@ -29,3 +29,10 @@ output "access_entries" {
   value       = module.eks.access_entries
   sensitive = true
 }
+
+output "cluster_certificate_authority_data" {
+  description = "cluster_certificate_authority_data"
+  value       = module.eks.cluster_certificate_authority_data
+  sensitive = true
+}
+
