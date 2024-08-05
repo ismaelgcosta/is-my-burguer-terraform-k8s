@@ -22,6 +22,10 @@ module "eks" {
   control_plane_subnet_ids                 = module.vpc.intra_subnets
   enable_cluster_creator_admin_permissions = true
 
+  iam_role_additional_policies = {
+    AmazonSQSFullAccess = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
+  }
+
   # Temp workaround for bug : double owned tag 
   # https://github.com/terraform-aws-modules/terraform-aws-eks/issues/1810
   node_security_group_tags = {
@@ -36,6 +40,10 @@ module "eks" {
     disk_size             = 30
     attach_cluster_primary_security_group = true
 
+    iam_role_additional_policies = {
+      AmazonSQSFullAccess = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
+    }
+
     tags = {
       Example = local.name
     }
@@ -48,7 +56,7 @@ module "eks" {
       max_size     = 3
       desired_size = 2
 
-      instance_types = ["t3.medium"]
+      instance_types = ["t3.large"]
       capacity_type  = "SPOT"
 
       tags = {
